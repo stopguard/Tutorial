@@ -105,9 +105,3 @@ datetime_1 = datetime.datetime(year=2020, month=12, day=5, hour=18, minute=57, s
 атрибуты - years, months итд
 datetime.datetime.now() - текущее время
 """
-import datetime
-a = datetime.datetime(2020, 10, 1)
-b = datetime.datetime(2020, 11, 1)
-c = b-a
-print(c.total_seconds())
-
