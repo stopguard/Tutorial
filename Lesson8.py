@@ -1,6 +1,6 @@
 """"""
+# РЕГУЛЯРНЫЕ ВЫРАЖЕНИЯ=============================================================================
 r"""
-РЕГУЛЯРНЫЕ ВЫРАЖЕНИЯ
 для работы с регулярными выражениями используется 
 
 модуль re
@@ -86,3 +86,119 @@ r"""
     (?(id/name)yes-pattern|no-pattern)  - если группа с указанным именем/номером существует
                                           используется yes иначе no(необязательный аргумент)
 """
+# ДЕКОРАТОРЫ=======================================================================================
+r"""
+Синтаксически функция A объявленная выше функции B и 
+    указанная на сразу над объявлением функции B с префиксом @ становится декоратором.
+    в примере ниже p_wrapper является декоратором для функции render_input:
+        def p_wrapper(func):
+            def tag_wrapper(*args, **kwargs):
+                markup = func(*args, **kwargs)
+                return f'<p>{markup}</p>'
+        
+            return tag_wrapper
+        
+        
+        @p_wrapper
+        def render_input(field):
+            return f'<input id="id_{field}" type="text" name="{field}">'
+        
+        
+        username_f = render_input('username')
+        print(username_f)
+
+Первое - аргументом декоратора становится оборачиваемая функция(над которой написон декоратор)
+Второе - внутри декоратора должна быть функция которая пример аргументы декорируемой функции
+
+для вызова данных о декорируемой функции из внешнего декоратора, 
+    требуется декорировать внутреннюю функцию этого декоратора декоратором 
+        @wraps
+    предварительно его требуется импортировать из модуля functools. например без wraps:
+        from functools import wraps
+        
+        
+        def simple_cache(func):
+            # @wraps(func)
+            def wrapper(*args):
+                res = func(*args)
+                return res
+            return wrapper
+        
+        
+        def logger(func):
+            def wrapper(*args):
+                result = func(*args)
+                funct = func.__name__
+                print(f'\tcall {funct}({", ".join(map(str, args))})')
+                return result
+            return wrapper
+        
+        
+        @logger
+        @simple_cache
+        def render_input(field):
+            return f'<input id="id_{field}" type="text" name="{field}">'
+        
+        
+        username_f = render_input('username')
+        >>> call wrapper(username)
+
+    с wraps:
+    
+        from functools import wraps
+        
+        
+        def simple_cache(func):
+            @wraps(func)
+            def wrapper(*args):
+                res = func(*args)
+                return res
+            return wrapper
+        
+        
+        def logger(func):
+            def wrapper(*args):
+                result = func(*args)
+                funct = func.__name__
+                print(f'\tcall {funct}({", ".join(map(str, args))})')
+                return result
+            return wrapper
+        
+        
+        @logger
+        @simple_cache
+        def render_input(field):
+            return f'<input id="id_{field}" type="text" name="{field}">'
+        
+        
+        username_f = render_input('username')
+        >>> call render_input(username)
+"""
+from functools import wraps
+
+
+def simple_cache(func):
+    @wraps(func)
+    def wrapper(*args):
+        res = func(*args)
+        return res
+    return wrapper
+
+
+def logger(func):
+    def wrapper(*args):
+        result = func(*args)
+        funct = func.__name__
+        print(f'\tcall {funct}({", ".join(map(str, args))})')
+        return result
+    return wrapper
+
+
+@logger
+@simple_cache
+def render_input(field):
+    return f'<input id="id_{field}" type="text" name="{field}">'
+
+
+username_f = render_input('username')
+print(username_f)
