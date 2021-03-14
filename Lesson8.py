@@ -142,7 +142,8 @@ r"""
         
         
         username_f = render_input('username')
-        >>> call wrapper(username)
+    
+    >>> call wrapper(username)
 
     с wraps:
     
@@ -173,7 +174,8 @@ r"""
         
         
         username_f = render_input('username')
-        >>> call render_input(username)
+    
+    >>> call render_input(username)
 """
 from functools import wraps
 
