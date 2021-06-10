@@ -648,3 +648,14 @@ shutil.copy(a, b) - копирует файл. источник полное и�
 datetime.datetime.now() - текущая дата-время
 
 """
+qa_list = {
+    'question1': {'answer1': 1, 'answer2': 2},
+    'question2': {'answer1': 1, 'answer2': 2}
+}
+
+summ = 0
+for question in range(3):
+    answer = input(f'{question}\n input answer')
+    summ += qa_list[question].get(answer, 0)
+
+print(summ)
